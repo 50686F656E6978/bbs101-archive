@@ -1,0 +1,141 @@
+bbs101, multi-threaded using pthreads
+=> faster & more efficient than message passing
+==> not possible to run under inetd though
+
+THREADS
+- one thread handles accepting connections
+- one thread handles signals with sigwait()
+- one thread per user connection
+- one thread that manages expiration of cached objects
+
+MUTEXES
+- mutex locks around who-list
+- mutex locks around roomlist
+- mutex lock per room object
+- mutex lock per user object
+- mutex locks around database I/O functions;
+  only 1 thread accesses the database at a time
+
+- mutex lock for every global var
+
+
+INTERRUPTIBLE READ
+- getch() reads character from input buffer
+  blocks in read() when there is no input
+- igetch() checks XMSG buffer for new messages
+  gets character from input buffer when there are no messages
+  branches to read messages when there are
+  uses select(timeout=1) to read new input into buffer
+
+
+DATABASE
+uses libsdb ?
+
+- table Users
+	id INT IDENTITY(1,1) PRIMARY KEY,
+	name VARCHAR(18) UNIQUE,
+	password VARCHAR(80),
+	real_name VARCHAR(80),
+	street VARCHAR(80),
+	zipcode VARCHAR(80),
+	city VARCHAR(80),
+	state VARCHAR(80),
+	country VARCHAR(80),
+	phone VARCHAR(80),
+	email VARCHAR(80),
+	www VARCHAR(80),
+	doing VARCHAR(80),
+	reminder VARCHAR(80),
+	default_anon VARCHAR(18),
+	timezone VARCHAR(40),
+	vanity VARCHAR(80),
+	xmsg_header VARCHAR(80),
+	away VARCHAR(80),
+	symbols VARCHAR(80),
+
+	birth INT,
+	login_time INT,
+	last_logout INT,
+	logins INT,
+	total_time INT,
+	last_online_time INT,
+
+	xsent INT,
+	xrecv INT,
+	esent INT,
+	erecv INT,
+	fsent INT,
+	frecv INT,
+	qsent INT,
+	qansw INT,
+	posted INT,
+	read INT,
+
+	flags INT,
+	flags2 INT,
+	default_room INT,
+
+	colors VARCHAR(80),
+	symbol_colors VARCHAR(80),
+
+	quick VARCHAR(190),
+	friends VARCHAR(10000),
+	enemies VARCHAR(10000),
+	override VARCHAR(10000),
+
+	info VARCHAR(100000)
+
+
+- table Joined						# joined rooms for user id
+	id INT IDENTITY(1,1) PRIMARY KEY,
+	user_id INT FOREIGN KEY,		# ref to User
+	room_id INT,
+	last_read INT,
+	zapped INT
+
+- table Mail						# mail messages
+	id INT IDENTITY(1,1) PRIMARY KEY,
+	user_id INT FOREIGN KEY,		# ref to User
+	message_id INT FOREIGN KEY,		# ref to Messages
+
+	mailto VARCHAR(10000)			# mail recipients
+
+
+- table Rooms						# all rooms
+	id INT IDENTITY(1,1) PRIMARY KEY,
+	name VARCHAR(60) UNIQUE,
+	category VARCHAR(80),
+
+	number INT,
+	flags INT,
+	roominfo_changed INT,
+	last_msg_id INT,
+	max_msgs INT,
+
+	room_aides VARCHAR(10000),
+	kicked VARCHAR(10000),
+	invited VARCHAR(10000),
+
+	info VARCHAR(100000)
+
+
+- table Messages					# messages in rooms
+	id INT IDENTITY(1,1) PRIMARY KEY,
+	room_id INT FOREIGN KEY,		# ref to Rooms
+	from VARCHAR(18),
+	anon VARCHAR(18),
+	deleted_by VARCHAR(18),
+	reply_name VARCHAR(18),
+
+	subject VARCHAR(80),
+	roomname VARCHAR(60),			# originally in ...>
+
+	reply INT,
+	time INT,
+	deleted INT,
+	flags INT,
+
+	message VARCHAR(100000)
+
+
+EOB

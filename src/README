@@ -1,0 +1,57 @@
+bbs101 Copyright (c) 2009 by Walter de Jong <walter@heiho.net>
+
+
+bbs101 is a rewrite of bbs100.
+
+bbs101 is beta software. Only a limited set of features is implemented;
+ * the eXpress message system is mostly working
+ * eXpress messages, emotes, pings, profile, and screen lock are working
+ * you can use cursor keys while editing and pageup/pagedown are working
+   on the --More-- prompt
+ * the Config menu is present
+ * a basic Sysop menu is present
+ * there are no rooms implemented
+ * you can not post messages
+ * you can not send Mail to other users
+
+This means that at this moment, bbs101 is mostly a chat-only version
+of bbs100.
+
+
+bbs101 uses a multi-threaded programming model. This means: no more dreadful
+state machine!
+Every user instance in bbs101 runs its own thread. This means you have to
+take locking into account. I have already implemented the hardest part,
+which is the interactive messages system.
+
+The backend of the BBS is powered by MySQL.
+The file bbs101.sql holds the SQL source to create the database.
+The database must be named 'bbs101', the admin user must be named 'bbs101',
+and the database password must be 'bbs1oh1'.
+To make yourself Sysop, insert your name into the 'Sysops' database table.
+You will have to this from the mysql> prompt; there is no way to do this
+from within the bbs (this is considered a security feature).
+
+By default, the Makefile produces a debug binary. This is an exceptionally
+slow and inefficient binary; for production uses, edit the Makefile first.
+
+Upon startup, the bbs does not go into the background yet. If there are no
+users online, it is OK to terminate the process with Ctrl-C.
+
+
+By the way, I'm not throwing some half-finished product on the net.
+bbs101 runs quite alright, just be aware that for the moment, it's online
+chat only.
+I hereby allow you to run a modified version of this code, as long as you
+leave the copyright notices intact, thank you.
+
+My apologies for the rather summary information on bbs101, but I'm sure
+you techies will know what to do with it ...
+
+
+Greets,
+
+     --Walter <walter@heiho.net>
+
+
+EOB

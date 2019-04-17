@@ -1,0 +1,5 @@
+<white>bbs101<green> is a system that is based on <white>bbs100<green>. Because <white>bbs101<green> is in <yellow>beta<green>,
+it is not fully featured yet. The interactive messages system is
+working, but rooms are not and you can not post messages in rooms.
+
+Also because <white>bbs101<green> is in <yellow>beta<green>, this Help in incomplete.
